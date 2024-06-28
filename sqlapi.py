@@ -5,7 +5,7 @@ from datetime import timedelta
 from flask import Blueprint, request
 
 from api_auth import JWTGenerator
-from utils import api_response, params_valid
+from utils import api_response, phone_params_valid
 
 
 sqlapi = Blueprint('sqlapi', __name__)
@@ -48,37 +48,12 @@ def exec_and_fetch(sql):
         raise Exception("Invalid response from API")
 
 
-@sqlapi.route("/sqlapi/trips/monthly")
+@sqlapi.route("/sqlapi/customer/detais_by_phone")
 @api_response
-def get_trips_monthly():
-    start_range = request.args.get('start_range')
-    end_range = request.args.get('end_range')
-    if start_range and end_range and params_valid(start_range, end_range):
-        sql = f"select COUNT(*) as trip_count, MONTHNAME(starttime) as month from demo.trips where starttime between '{start_range}' and '{end_range}' group by MONTH(starttime), MONTHNAME(starttime) order by MONTH(starttime);"
+def get_customers_by_phone():
+    phone = request.args.get('phone')
+    if phone and phone_params_valid(phone):
+        sql = f"SELECT C.C_NAME AS Name,C.C_ACCTBAL AS Account_Balance,C.C_ADDRESS AS Address,N.N_NAME AS Nation,R.R_NAME AS Region,C_PHONE AS Phone,C_MKTSEGMENT AS Market_Segment FROM CUSTOMER C INNER JOIN NATION N ON C.C_NATIONKEY = N.N_NATIONKEY INNER JOIN REGION R ON N.N_REGIONKEY = R.R_REGIONKEY WHERE C.C_PHONE'{phone}'ORDER BY C.C_NAME;"
         return exec_and_fetch(sql)
-    sql = "select COUNT(*) as trip_count, MONTHNAME(starttime) as month from demo.trips group by MONTH(starttime), MONTHNAME(starttime) order by MONTH(starttime);"
-    return exec_and_fetch(sql)
-
-
-@sqlapi.route("/sqlapi/trips/day_of_week")
-@api_response
-def get_day_of_week():
-    start_range = request.args.get('start_range')
-    end_range = request.args.get('end_range')
-    if start_range and end_range and params_valid(start_range, end_range):
-        sql = f"select COUNT(*) as trip_count, DAYNAME(starttime) as day_of_week from demo.trips where starttime between '{start_range}' and '{end_range}' group by DAYOFWEEK(starttime), DAYNAME(starttime) order by DAYOFWEEK(starttime);"
-        return exec_and_fetch(sql)
-    sql = "select COUNT(*) as trip_count, DAYNAME(starttime) as day_of_week from demo.trips group by DAYOFWEEK(starttime), DAYNAME(starttime) order by DAYOFWEEK(starttime);"
-    return exec_and_fetch(sql)
-
-
-@sqlapi.route("/sqlapi/trips/temperature")
-@api_response
-def get_temperature():
-    start_range = request.args.get('start_range')
-    end_range = request.args.get('end_range')
-    if start_range and end_range and params_valid(start_range, end_range):
-        sql = f"with weather_trips as (select * from demo.trips t inner join demo.weather w on date_trunc(\"day\", t.starttime) = w.observation_date) select round(temp_avg_f, -1) as temp, count(*) as trip_count from weather_trips where starttime between '{start_range}' and '{end_range}' group by round(temp_avg_f, -1) order by round(temp_avg_f, -1) asc;"
-        return exec_and_fetch(sql)
-    sql = "with weather_trips as (select * from demo.trips t inner join demo.weather w on date_trunc(\"day\", t.starttime) = w.observation_date) select round(temp_avg_f, -1) as temp, count(*) as trip_count from weather_trips group by round(temp_avg_f, -1) order by round(temp_avg_f, -1) asc;"
+    sql = "SELECT COUNT(*) FROM CUSTOMER ;"
     return exec_and_fetch(sql)

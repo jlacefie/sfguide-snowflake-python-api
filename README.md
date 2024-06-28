@@ -1,4 +1,5 @@
-# A Simple API Powered by Snowflake
+
+# A Simple API Powered by Snowflake | Forked from https://quickstarts.snowflake.com/guide/build_a_custom_api_in_python_on_aws/index.html?index=..%2F..index#0
 
 Technologies used: [Snowflake](https://snowflake.com/), [Python](https://www.python.org/), [Flask](https://palletsprojects.com/p/flask/), [AWS API Gateway](https://aws.amazon.com/api-gateway/), [AWS Lambda](https://aws.amazon.com/lambda/), [Serverless Framework](https://www.serverless.com/)
 
