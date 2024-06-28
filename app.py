@@ -1,3 +1,4 @@
+import decimal
 from flask import Flask, jsonify, make_response
 
 from connector import connector
