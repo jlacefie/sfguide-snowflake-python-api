@@ -21,6 +21,7 @@ Your SnowFlake Account is of the format <Locator>.<Region> where Locator is foun
 
 Use the guided exercise found here to setup this project https://quickstarts.snowflake.com/guide/build_a_custom_api_in_python_on_aws
 
+This demo uses the SnowFlake sample data tpch tables.  Be sure to create views to expose the shared tables to the user/db/schema created during setup above. Simple CREATE VIEW statements suffice. 
 
 Install serverless and other required node packages and configure serverless (sls) for the project.
 
