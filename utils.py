@@ -3,11 +3,15 @@ import functools, time, re
 from flask import jsonify, make_response
 
 
-def params_valid(start_range, end_range):
-    if re.search("^[0-9]{2}/[0-9]{2}/[0-9]{4}$", start_range) and re.search("^[0-9]{2}/[0-9]{2}/[0-9]{4}$", end_range):
+def phone_params_valid(phone):
+    if re.search("^[0-9]{2}-[0-9]{3}-[0-9]{3}-[0-9]{4}$", phone):
         return True
     return False
 
+def okey_params_valid(okey):
+    if re.search("^\d+$", okey):
+        return True
+    return False
 
 def api_response(func):
     @functools.wraps(func)

@@ -5,7 +5,7 @@ from datetime import timedelta
 from flask import Blueprint, request
 
 from api_auth import JWTGenerator
-from utils import api_response, phone_params_valid
+from utils import api_response, phone_params_valid, okey_params_valid
 
 
 sqlapi = Blueprint('sqlapi', __name__)
@@ -47,13 +47,32 @@ def exec_and_fetch(sql):
         print(f"ERROR: Status code from {sql}: {r.status_code}")
         raise Exception("Invalid response from API")
 
-
-@sqlapi.route("/sqlapi/customer/detais_by_phone")
+@sqlapi.route("/sqlapi/customer/details_by_phone")
 @api_response
 def get_customers_by_phone():
     phone = request.args.get('phone')
     if phone and phone_params_valid(phone):
-        sql = f"SELECT C.C_NAME AS Name,C.C_ACCTBAL AS Account_Balance,C.C_ADDRESS AS Address,N.N_NAME AS Nation,R.R_NAME AS Region,C_PHONE AS Phone,C_MKTSEGMENT AS Market_Segment FROM CUSTOMER C INNER JOIN NATION N ON C.C_NATIONKEY = N.N_NATIONKEY INNER JOIN REGION R ON N.N_REGIONKEY = R.R_REGIONKEY WHERE C.C_PHONE'{phone}'ORDER BY C.C_NAME;"
+        sql = f"SELECT C.C_NAME,C.C_ACCTBAL,C.C_ADDRESS,N.N_NAME,R.R_NAME,C_PHONE,C_MKTSEGMENT FROM CUSTOMER C INNER JOIN NATION N ON C.C_NATIONKEY = N.N_NATIONKEY INNER JOIN REGION R ON N.N_REGIONKEY = R.R_REGIONKEY WHERE C.C_PHONE = '{phone}' ORDER BY C.C_NAME;"
         return exec_and_fetch(sql)
     sql = "SELECT COUNT(*) FROM CUSTOMER ;"
+    return exec_and_fetch(sql)
+
+@sqlapi.route("/sqlapi/order/orders_by_cust_phone")
+@api_response
+def get_orders_by_cust_phone():
+    phone = request.args.get('phone')
+    if phone and phone_params_valid(phone):
+        sql = f"SELECT O.O_ORDERKEY, O.O_CUSTKEY, O.O_ORDERSTATUS, O.O_TOTALPRICE, O.O_CLERK FROM ORDERS O INNER JOIN CUSTOMER C ON O.O_CUSTKEY = C.C_CUSTKEY WHERE C.C_PHONE = '{phone}' ORDER BY O_ORDERDATE"
+        return exec_and_fetch(sql)
+    sql = "SELECT COUNT(*) FROM ORDERS ;"
+    return exec_and_fetch(sql)
+
+@sqlapi.route("/sqlapi/order/details_by_orderkey")
+@api_response
+def get_orders_details_by_okey():
+    okey = request.args.get('okey')
+    if okey and okey_params_valid(okey):
+        sql = f"SELECT O.O_ORDERKEY, O.O_CUSTKEY, O.O_ORDERSTATUS, O.O_TOTALPRICE, O.O_CLERK, L.L_LINENUMBER, L.L_LINESTATUS, L.L_QUANTITY, L.L_EXTENDEDPRICE, L.L_TAX, L.L_SHIPDATE, L.L_SHIPINSTRUCT, L.L_SHIPMODE, L.L_RETURNFLAG, P.P_NAME, P.P_BRAND, P.P_MFGR, P.P_SIZE, P.P_TYPE FROM ORDERS O INNER JOIN CUSTOMER C ON O.O_CUSTKEY = C.C_CUSTKEY INNER JOIN LINEITEM L ON O.O_ORDERKEY = L.L_ORDERKEY INNER JOIN PART P ON L.L_PARTKEY = P.P_PARTKEY WHERE O.O_ORDERKEY = '{okey}' ORDER BY O.O_ORDERDATE, L.L_LINENUMBER"
+        return exec_and_fetch(sql)
+    sql = "SELECT COUNT(*) FROM ORDERS ;"
     return exec_and_fetch(sql)
