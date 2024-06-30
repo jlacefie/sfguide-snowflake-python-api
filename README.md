@@ -13,7 +13,7 @@ Requirements:
 This project demonstrates how to build and deploy a custom API powered by Snowflake. It uses a simple Python Flask API service running on AWS Lambda using Serverless Framework. Connectivity to Snowflake is made via key pair authentication.
 
 ## API Documentation
-API documentation with samples is located at this URL https://documenter.getpostman.com/view/36644187/2sA3duGtDu
+API documentation with samples is hosted by Postman [here](https://documenter.getpostman.com/view/36644187/2sA3duGtDu)
 
 ## Configuration
 
