@@ -11,9 +11,10 @@ def sanitize_input(input):
 st.title('Snowflake Sample API App')
 
 # URLS for REST calls
-cust_by_phone_url = "http://localhost:5000/customer/details_by_phone"
-cust_orders_by_phone_url = "http://localhost:5000/order/orders_by_cust_phone"
-order_summary_url = "http://localhost:5000/order/details_by_orderkey"
+BASE_URL = st.text_input('Enter the Base URL here:', 'http://localhost:5000', key='base_url_input')
+cust_by_phone_url = f"{BASE_URL}/customer/details_by_phone"
+cust_orders_by_phone_url = f"{BASE_URL}/order/orders_by_cust_phone"
+order_summary_url = f"{BASE_URL}/order/details_by_orderkey"
 
 # Input box for the user to enter the customer's phone number
 phone_st = st.text_input('Enter the Customer Phone Number here:', '', key='cust_input')

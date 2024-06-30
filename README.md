@@ -15,6 +15,15 @@ This project demonstrates how to build and deploy a custom API powered by Snowfl
 ## API Documentation
 API documentation with samples is hosted by Postman [here](https://documenter.getpostman.com/view/36644187/2sA3duGtDu)
 
+## API Sample UI
+A Sample UI is provided alongside the forked API example.  The UI is built using Streamlit and can be run locally. 
+
+To use:
+1. Download Streamlit 
+2. Create a python virtual environment
+3. To run the app, use the command `streamlit run streamlit-app.py`.
+4. Assuming defaults, access the app at this URL - http://localhost:8501/
+
 ## Configuration
 
 Copy the serverless-template.yml to serverless.yml and modify the parameters according to your Snowflake configuration. Put your private key
