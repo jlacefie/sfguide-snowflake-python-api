@@ -25,4 +25,4 @@ tomlkit==0.12.2
 typing_extensions==4.8.0
 urllib3==1.26.18
 Werkzeug==3.0.1
-streamlit==1.10.0
+# streamlit==1.10.0
